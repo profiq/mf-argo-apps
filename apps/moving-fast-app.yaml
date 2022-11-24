@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: movingfast
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: mf-test=ghcr.io/profiq/mf-test-app
+    argocd-image-updater.argoproj.io/mf-test.helm.image-name: image.repository
+    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/argo-git-creds
+    argocd-image-updater.argoproj.io/git-branch: main
+spec:
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  source:
+    repoURL: https://github.com/profiq/mf-test-app-helm.git
+    targetRevision: main
+    path: helm-chart
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: movingfast
