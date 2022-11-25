@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: movingfast
+  namespace: argocd
+spec:
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  source:
+    repoURL: https://github.com/profiq/mf-test-app-helm.git
+    targetRevision: main
+    path: helm-chart
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: movingfast
